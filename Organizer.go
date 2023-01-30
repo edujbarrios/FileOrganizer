@@ -180,4 +180,58 @@ func organizeFolder(folder string, categories []string) {
     }
   }
 }
+  
+func createCategory(category string) {
+  targetDir := filepath.Join(dir, category)
 
+  // Check if the target directory exists
+  if _, err := os.Stat(targetDir); os.IsNotExist(err) {
+    // Create the target directory if it doesn't exist
+    os.Mkdir(targetDir, os.ModePerm)
+  }
+}
+
+func copyFile(file string, category string) {
+  targetDir := filepath.Join(dir, category)
+  targetPath := filepath.Join(targetDir, filepath.Base(file))
+
+  // Check if the target directory exists
+  if _, err := os.Stat(targetDir); os.IsNotExist(err) {
+    // Create the target directory if it doesn't exist
+    os.Mkdir(targetDir, os.ModePerm)
+  }
+
+  // Copy the file to the target directory
+  src, err := os.Open(file)
+  if err != nil {
+    panic(err)
+  }
+  defer src.Close()
+
+  dst, err := os.Create(targetPath)
+  if err != nil {
+    panic(err)
+  }
+  defer dst.Close()
+
+  _, err = io.Copy(dst, src)
+  if err != nil {
+    panic(err)
+  }
+}
+
+func deleteFile(file string) {
+  err := os.Remove(file)
+  if err != nil {
+    panic(err)
+  }
+}
+
+func renameFile(file string, newName string) {
+  targetPath := filepath.Join(filepath.Dir(file), newName)
+
+  err := os.Rename(file, targetPath)
+  if err != nil {
+    panic(err)
+  }
+}
