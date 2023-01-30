@@ -5,6 +5,7 @@ import (
   "os"
   "path/filepath"
   "sort"
+  "./File_Search"
 )
 
 func main() {
@@ -27,7 +28,16 @@ func main() {
   for _, file := range files {
     fmt.Println(file)
   }
-}
+  result := search.SearchFiles("/path/to/folder", "searchTerm")
+
+  if len(result) == 0 {
+    fmt.Println("No se encontraron archivos que coincidan con el término de búsqueda.")
+  } else {
+    fmt.Println("Se encontraron los siguientes archivos:")
+    for _, file := range result {
+      fmt.Println(file)
+    }
+  }
 
 func categorize(file string) string {
   fileInfo, err := os.Stat(file)
